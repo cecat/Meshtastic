@@ -53,9 +53,9 @@ MQTT_USERNAME="meshdev"            # Default public MQTT username
 MQTT_PASSWORD="large4cats"         # Default public MQTT password
 
 # --- LOCATION (Set to your node's location) ---
-LATITUDE="40.7128"                 # Your latitude (decimal degrees)
-LONGITUDE="-74.0060"               # Your longitude (decimal degrees)
-ALTITUDE="10"                      # Your altitude in meters
+LATITUDE="41.8830"                 # Your latitude (decimal degrees)
+LONGITUDE="-87.6233"               # Your longitude (decimal degrees)
+ALTITUDE="180"                     # Your altitude in meters
 POSITION_PRECISION="15"            # Privacy: 10=~10m, 13=~100m, 14=~200m, 15=~400m, 16=~1km
 ```
 
