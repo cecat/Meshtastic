@@ -75,7 +75,7 @@ echo "Step 1: Core Radio Settings..."
 meshtastic $CONNECT \
     --set lora.region US \
     --set device.role ROUTER \
-    --set device.tzdef "CST6CDT,M3.2.0/2:00:00,M11.1.0/2:00:00"
+    --set device.tzdef "$TIMEZONE"
 
 echo "Step 2: Names and Position Flags..."
 meshtastic $CONNECT \

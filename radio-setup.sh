@@ -85,7 +85,7 @@ meshtastic --port "$PORT" \
     --set-owner "$LONG_NAME" \
     --set-owner-short "$SHORT_NAME" \
     --set position.position_flags 813 \
-    --set device.tzdef "CST6CDT,M3.2.0/2:00:00,M11.1.0/2:00:00"
+    --set device.tzdef "$TIMEZONE"
 
 # POSITION CONFIG: CRITICAL - All position settings in ONE command
 # This prevents the system from resetting position_broadcast_secs to 43200
