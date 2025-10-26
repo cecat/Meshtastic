@@ -1,8 +1,19 @@
 #!/bin/zsh
 
+# Meshtastic Node Setup Script
+# This script configures a Meshtastic device from factory reset to fully operational
+# 
+# PREREQUISITES:
+# 1. Flash firmware FIRST using Web Flasher: https://flasher.meshtastic.org
+# 2. Edit secrets.sh with your WiFi and location details
+# 3. Edit LONG_NAME and SHORT_NAME below for this specific node
+# 4. Connect device via USB and verify PORT setting below
+
 # --- SYSTEM SETTINGS  ---
-# Find on your system by plugging radio into USB and
-# ls /dev/cu.*
+# Find your device port by:
+#   macOS: ls /dev/cu.*
+#   Linux: ls /dev/ttyUSB* or ls /dev/ttyACM*
+#   Windows: Check Device Manager for COM port
 
 PORT="/dev/cu.SLAB_USBtoUART"
 
@@ -11,11 +22,17 @@ source "$(dirname "$0")/secrets.sh"
 
 # --- NAME THE NODE ---
 # Substitute your node names here
+# LONG_NAME can be up to 40 characters
+# SHORT_NAME should be 4 characters max for best display
 
 LONG_NAME="Charlie's node n"
 SHORT_NAME="CECn"
 
 # --- STEP 0: FACTORY RESET (REQUIRED TO CLEAN THE MEMORY) ---
+# Factory reset ensures:
+# - No stale configuration from previous setups
+# - Clean slate prevents settings conflicts
+# - Reduces risk of settings reverting to old values
 
 echo "0. Performing Factory Reset..."
 meshtastic --port "$PORT" --factory-reset
@@ -25,6 +42,10 @@ sleep 45
 
 
 # --- STEP 1: FORCE CORE RADIO AND ROLE (REQUIRES REBOOT) ---
+# CRITICAL: These MUST be set first, together, before other settings
+# Region: Required by law, affects frequency and duty cycle
+# Role: ROUTER is for fixed infrastructure nodes that help extend the mesh
+#       Use CLIENT for mobile/handheld devices instead
 
 echo "1. Applying CRITICAL Radio Region and Device Role..."
 # CRITICAL: LoRa Region and Role TOGETHER (MUST be set after reset)
@@ -33,13 +54,16 @@ meshtastic --port "$PORT" \
     --set device.role ROUTER
 
 # FORCE REBOOT TO PERSIST CORE SETTINGS
-
 echo "Forcing reboot to commit Region and Role. Wait 20 seconds..."
 meshtastic --port "$PORT" --reboot
 sleep 20
 
 
 # --- STEP 2: APPLY WIFI (BEFORE OTHER SETTINGS) ---
+# WiFi must be configured early because:
+# - MQTT requires network connectivity
+# - NTP server needs network for accurate time
+# - Reboot ensures WiFi is connected before proceeding
 
 echo "2. Configuring WiFi (must be done early)..."
 
@@ -56,6 +80,12 @@ meshtastic --port "$PORT" --reboot
 sleep 25
 
 # --- STEP 3: SET NAMES, POSITION, TIMEZONE, AND DISPLAY ---
+# All position-related settings MUST be set together
+# Firmware bug: Setting position values separately can cause
+# position_broadcast_secs to revert to 43200 (12 hours) default
+# 
+# Position flags 813 = IS_ROUTER (1) + IS_STATION (812)
+# This tells other nodes this is a fixed infrastructure node
 
 echo "3. Applying Names, Position, Timezone, and Display Settings..."
 
@@ -68,6 +98,7 @@ meshtastic --port "$PORT" \
 
 # POSITION CONFIG: CRITICAL - All position settings in ONE command
 # This prevents the system from resetting position_broadcast_secs to 43200
+# Including altitude here with other settings minimizes risk of reversion
 meshtastic --port "$PORT" \
     --set position.gps_mode DISABLED \
     --set position.fixed_position true \
@@ -76,7 +107,8 @@ meshtastic --port "$PORT" \
     --setalt "$ALTITUDE" \
     --set position.position_broadcast_secs 120
 
-# DISPLAY CONFIG: Keep screen always on
+# DISPLAY CONFIG: Screen always on (0 = never timeout)
+# For battery-powered nodes, consider a timeout like 300 seconds
 meshtastic --port "$PORT" --set display.screen_on_secs 0
 
 # FORCE REBOOT TO PERSIST NAME/POSITION/DISPLAY/TIMEZONE
@@ -85,6 +117,14 @@ meshtastic --port "$PORT" --reboot
 sleep 20
 
 # --- STEP 4: CONFIGURE MQTT WITH MAP REPORTING ---
+# MQTT allows the node to:
+# - Report to public map (meshmap.net)
+# - Communicate with other nodes via internet
+# - Bridge LoRa mesh to MQTT network
+#
+# Map reporting settings:
+# - publish_interval_secs: How often to update the map (60 = every minute)
+# - position_precision: Accuracy level for privacy (10 = ~10 meter precision)
 
 echo "4. Applying MQTT Configuration with Map Reporting..."
 
@@ -103,6 +143,8 @@ meshtastic --port "$PORT" \
     --set mqtt.map_report_settings.publish_interval_secs 60
 
 # CHANNEL CONFIG: Enable Uplink/Downlink - TOGETHER
+# Uplink: Send to MQTT from LoRa mesh
+# Downlink: Receive from MQTT to LoRa mesh
 meshtastic --port "$PORT" \
     --ch-set uplink_enabled true --ch-index 0 \
     --ch-set downlink_enabled true --ch-index 0
