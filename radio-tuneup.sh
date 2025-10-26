@@ -30,10 +30,6 @@ PORT="/dev/cu.SLAB_USBtoUART"
 # --- LOAD SECRETS ---
 source "$(dirname "$0")/secrets.sh"
 
-# --- NAME THE NODE ---
-LONG_NAME="Charlie's node n"
-SHORT_NAME="CECn"
-
 # --- BUILD CONNECTION STRING ---
 if [ "$CONNECTION_TYPE" = "usb" ]; then
     CONNECT="--port $PORT"

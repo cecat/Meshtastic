@@ -5,9 +5,8 @@
 # 
 # PREREQUISITES:
 # 1. Flash firmware FIRST using Web Flasher: https://flasher.meshtastic.org
-# 2. Edit secrets.sh with your WiFi and location details
-# 3. Edit LONG_NAME and SHORT_NAME below for this specific node
-# 4. Connect device via USB and verify PORT setting below
+# 2. Edit secrets.sh with your WiFi, location, and node name details
+# 3. Connect device via USB and verify PORT setting below
 
 # --- SYSTEM SETTINGS  ---
 # Find your device port by:
@@ -17,16 +16,8 @@
 
 PORT="/dev/cu.SLAB_USBtoUART"
 
-# --- LOAD SECRETS (WiFi, MQTT credentials, location...)---
+# --- LOAD SECRETS (WiFi, MQTT credentials, location, node names...)---
 source "$(dirname "$0")/secrets.sh"
-
-# --- NAME THE NODE ---
-# Substitute your node names here
-# LONG_NAME can be up to 40 characters
-# SHORT_NAME should be 4 characters max for best display
-
-LONG_NAME="Charlie's node n"
-SHORT_NAME="CECn"
 
 # --- STEP 0: FACTORY RESET (REQUIRED TO CLEAN THE MEMORY) ---
 # Factory reset ensures:

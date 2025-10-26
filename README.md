@@ -41,6 +41,10 @@ This repository contains scripts and documentation for setting up Meshtastic ROU
 2. Update these values for YOUR setup:
 
 ```bash
+# --- NODE IDENTITY ---
+LONG_NAME="My Meshtastic Node"    # Full name (up to 40 characters)
+SHORT_NAME="NODE"                  # Short name (4 characters recommended)
+
 # --- NETWORK CREDENTIALS ---
 WIFI_SSID="YourWiFiName"          # Your WiFi network name
 WIFI_PSK="YourWiFiPassword"       # Your WiFi password
@@ -54,6 +58,11 @@ LONGITUDE="-74.0060"               # Your longitude (decimal degrees)
 ALTITUDE="10"                      # Your altitude in meters
 POSITION_PRECISION="15"            # Privacy: 10=~10m, 13=~100m, 14=~200m, 15=~400m, 16=~1km
 ```
+
+**Node Names:**
+- **LONG_NAME**: Full descriptive name (up to 40 characters) shown in apps and on map
+- **SHORT_NAME**: Abbreviated name (4 characters recommended) shown on small displays
+- Make them unique and identifiable in your local mesh network
 
 **How to get your coordinates:**
 - Use Google Maps: Right-click location → Copy coordinates
@@ -84,12 +93,6 @@ POSITION_PRECISION="15"            # Privacy: 10=~10m, 13=~100m, 14=~200m, 15=~4
      - Check with: `ls /dev/ttyUSB* /dev/ttyACM*`
    - **Windows**: Usually `COM3`, `COM4`, etc.
      - Check in Device Manager
-
-4. Set your node name:
-   ```bash
-   LONG_NAME="Charlie's node n"    # Up to 40 characters
-   SHORT_NAME="CECn"                # 4 characters recommended
-   ```
 
 ### Step 4: Run the Setup Script
 
