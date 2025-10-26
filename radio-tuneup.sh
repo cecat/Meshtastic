@@ -110,7 +110,7 @@ meshtastic $CONNECT \
     --set mqtt.json_enabled false \
     --set mqtt.map_reporting_enabled true \
     --set mqtt.root msh/US/IL/Chi \
-    --set mqtt.map_report_settings.position_precision 10 \
+    --set mqtt.map_report_settings.position_precision "$POSITION_PRECISION" \
     --set mqtt.map_report_settings.publish_interval_secs 60
 
 echo "Step 6: Channel Settings..."

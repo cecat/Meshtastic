@@ -52,6 +52,7 @@ MQTT_PASSWORD="large4cats"         # Default public MQTT password
 LATITUDE="40.7128"                 # Your latitude (decimal degrees)
 LONGITUDE="-74.0060"               # Your longitude (decimal degrees)
 ALTITUDE="10"                      # Your altitude in meters
+POSITION_PRECISION="15"            # Privacy: 10=~10m, 13=~100m, 14=~200m, 15=~400m, 16=~1km
 ```
 
 **How to get your coordinates:**
@@ -59,6 +60,14 @@ ALTITUDE="10"                      # Your altitude in meters
 - Use your phone's GPS app
 - Use a GPS device
 - **DO NOT guess** - accuracy matters for mesh routing
+
+**Position Precision (Privacy Setting):**
+- Controls how precisely your location appears on meshmap.net
+- **10** = ~10 meters (shows specific building) - good for public infrastructure
+- **13** = ~100 meters (shows property area)
+- **14** = ~200 meters (shows neighborhood block)
+- **15** = ~400 meters (shows general neighborhood) - **recommended for home nodes**
+- **16** = ~1 kilometer (shows part of town) - maximum privacy
 
 ### Step 3: Edit the Setup Script
 
